@@ -1,0 +1,60 @@
+services:
+  app_odoo:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8069:8069"
+    # environment:
+      # Add additional options here, eg:
+      # ODOO_WORKERS: ${ODOO_WORKERS:-0}
+      # ODOO_MAX_CRON_THREADS: ${ODOO_MAX_CRON_THREADS:-0}
+    env_file:
+      - .env
+    volumes:
+      # Mount the custom config
+      - ./config/odoo.conf:/volumes/config/odoo.conf
+
+      # Mount your custom addons
+      - ./addons:/volumes/addons
+
+      # Mount your custom hooks
+      - ./hooks:/hooks
+
+      # Mount enterprise
+      # - ./enterprise:/volumes/enterprise
+
+      # Persist Odoo Data
+      - app_odoo_data:/volumes/data
+
+    depends_on:
+      app_odoo_db:
+        condition: service_healthy
+
+    networks:
+      - app_odoo_network
+
+  app_odoo_db:
+    image: postgres:13
+    container_name: app_odoo_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DATABASE:-postgres}
+    env_file:
+      - .env
+    volumes:
+      - app_odoo_db:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+    networks:
+      - app_odoo_network
+
+volumes:
+  app_odoo_data:
+  app_odoo_db:
+
+networks:
+  app_odoo_network:
