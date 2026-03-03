@@ -46,6 +46,7 @@ those addons and is set to `auto_install`.
 ### Docker Compose (recommended)
 
 Copy the environment file, and check the values:
+
 `cp .env.example .env`
 
 Start Odoo + Postgres:
