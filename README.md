@@ -1,7 +1,7 @@
 
 # Adomi - Odoo Community Base
 
-This extends our upstream [`odoo/odoo`](https://github.com/adomi-io/odoo) image and contains a selection of OCA 
+This extends our upstream [`adomi-io/odoo`](https://github.com/adomi-io/odoo) image and contains a selection of OCA 
 packages we commonly use in our projects.
 
 
