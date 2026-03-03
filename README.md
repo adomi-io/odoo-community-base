@@ -56,12 +56,6 @@ docker compose up --build
 Then open:
 http://localhost:8069
 
-Run in the background:
-
-```sh
-docker compose up -d --build
-```
-
 ### Add your own addons
 Place your custom addons under `./addons/`.
 
