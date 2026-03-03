@@ -7,7 +7,9 @@ packages we commonly use in our projects.
 
 > [!TIP]
 > Upstream image source code
-> [adomi-io/odoo](https://github.com/adomi-io/odoo)
+> 
+> - [adomi-io/odoo](https://github.com/adomi-io/odoo)
+> - [adomi-io/odoo-boilerplate](https://github.com/adomi-io/odoo-boilerplate)
 
 
 ## Highlights
