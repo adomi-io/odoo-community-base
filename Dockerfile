@@ -55,19 +55,6 @@ RUN git clone \
         /tmp/oca/web/web_responsive \
         /tmp/extra_addons/
 
-FROM oca_base AS oca_account_reconcile
-
-RUN mkdir -p /tmp/extra_addons
-
-RUN git clone \
-        --depth 1 \
-        --branch 19.0 \
-        https://github.com/OCA/account-reconcile.git \
-        /tmp/oca/account-reconcile \
-    && cp -a \
-        /tmp/oca/account-reconcile/account_statement_base \
-        /tmp/extra_addons/
-
 FROM oca_base AS oca_bank_statement_import
 
 RUN mkdir -p /tmp/extra_addons
@@ -132,7 +119,6 @@ COPY --from=oca_server_brand /tmp/extra_addons/ /volumes/extra_addons/
 COPY --from=oca_web /tmp/extra_addons/ /volumes/extra_addons/
 
 # OCA: Accounting related packages
-COPY --from=oca_account_reconcile /tmp/extra_addons/ /volumes/extra_addons/
 COPY --from=oca_bank_statement_import /tmp/extra_addons/ /volumes/extra_addons/
 
 # OCA: Pending upstream
