@@ -3,21 +3,10 @@
 > Upstream image source code
 > [adomi-io/odoo](https://github.com/adomi-io/odoo)
 
-# adomi-io/odoo-community-base
+# Adomi - Odoo Community Base
 
-This extends our upstream [`odoo/odoo`](https://github.com/adomi-io/odoo) image.
-
-This contains a selection of OCA packages we commonly use in our projects.
-
-> [!NOTE]
-> Adomi is an Odoo partner and consulting company. This repo is a foundation for
-> our open-source Odoo projects and the way we prefer to ship Odoo for modern
-> software teams.
-
-> [!WARNING]
-> This is not the official Odoo image.
-> If you’re looking for the official upstream image, see
-> [`odoo/docker`](https://github.com/odoo/docker).
+This extends our upstream [`odoo/odoo`](https://github.com/adomi-io/odoo) image and contains a selection of OCA 
+packages we commonly use in our projects.
 
 ## Highlights
 - **OCA Upstream** Grabs up-to-date plugins and bakes them into `/volumes/extra_addons` via a multi-stage
