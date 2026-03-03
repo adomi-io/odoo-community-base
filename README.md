@@ -1,21 +1,21 @@
 
-> [!TIP]
-> Upstream image source code
-> [adomi-io/odoo](https://github.com/adomi-io/odoo)
-
 # Adomi - Odoo Community Base
 
 This extends our upstream [`odoo/odoo`](https://github.com/adomi-io/odoo) image and contains a selection of OCA 
 packages we commonly use in our projects.
 
+
+> [!TIP]
+> Upstream image source code
+> [adomi-io/odoo](https://github.com/adomi-io/odoo)
+
+
 ## Highlights
-- **OCA Upstream** Grabs up-to-date plugins and bakes them into `/volumes/extra_addons` via a multi-stage
-  [`Dockerfile`](./Dockerfile) for ease of use in downstream projects
-- **Meta addon**: [`extra_addons/adomi_community`](./extra_addons/adomi_community) auto-installs
-  the bundled community dependencies
-- **Setup hook**:
-  [`hooks/setup/000.setup_adomi_community.sh`](hooks/setup/000.setup_adomi_community.sh) can create/init a DB and install
-  `adomi_community` once per persisted data directory
+
+* 🚀 **OCA packages included**: Grabs up-to-date community plugins and bakes them into `/volumes/extra_addons` via a multi-stage [`Dockerfile`](./Dockerfile) for easy downstream use.
+* 🧩 **Community bundle addon**: [`extra_addons/adomi_community`](./extra_addons/adomi_community) acts as a meta addon that auto-installs the bundled community dependencies.
+* 🪝 **Automated install via setup hook**: [`hooks/setup/000.setup_adomi_community.sh`](hooks/setup/000.setup_adomi_community.sh) can create/init a DB and install `adomi_community` once per persisted data directory.
+
 
 ## What’s included
 
