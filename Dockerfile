@@ -72,17 +72,17 @@ RUN git clone \
         /tmp/extra_addons/
 
 
-FROM oca_base AS oca_bank_statement_import_plaid
+FROM oca_base AS account_reconcile
 
 RUN mkdir -p /tmp/extra_addons
 
 RUN git clone \
         --depth 1 \
-        --branch 18.0 \
-        https://github.com/OCA/bank-statement-import.git \
-        /tmp/oca/bank-statement-import \
+        --branch 19.0 \
+        https://github.com/OCA/account-reconcile.git \
+        /tmp/oca/account-reconcile \
     && cp -a \
-        /tmp/oca/bank-statement-import/account_statement_import_online_plaid \
+        /tmp/oca/account-reconcile/account_statement_base \
         /tmp/extra_addons/
 
 
@@ -120,6 +120,7 @@ COPY --from=oca_web /tmp/extra_addons/ /volumes/extra_addons/
 
 # OCA: Accounting related packages
 COPY --from=oca_bank_statement_import /tmp/extra_addons/ /volumes/extra_addons/
+COPY --from=account_reconcile /tmp/extra_addons /volumes/extra_addons/
 
 # OCA: Pending upstream
 #COPY --from=oca_bank_statement_import_plaid /tmp/extra_addons/ /volumes/extra_addons/

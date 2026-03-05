@@ -63,6 +63,7 @@ jobs:
             ODOO_BASE_IMAGE=${{ env.ODOO_BASE_IMAGE }}
           tags: ${{ env.DESTINATION_REGISTRY }}/${{ env.DESTINATION_IMAGE_NAME }}:${{ env.IMAGE_TAG }}-test
           push: false
+          pull: true
           load: true
 
       - name: Run unit tests
