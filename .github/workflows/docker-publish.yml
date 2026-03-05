@@ -85,7 +85,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v5
         with:
-          images: ${{ env.DESTINATION_REGISTRY }}/${{ env.DESTINATION_IMAGE_NAME }}:${{ env.IMAGE_TAG }}
+          images: ${{ env.DESTINATION_REGISTRY }}/${{ env.DESTINATION_IMAGE_NAME }}
           tags: |
             # Tag by ref (master) or explicit override from workflow_dispatch
             type=raw,value=${{ env.IMAGE_TAG }}
