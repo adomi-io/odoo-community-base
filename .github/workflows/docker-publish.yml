@@ -1,4 +1,4 @@
-name: Docker
+name: Build and Push Odoo Docker Image
 
 on:
   workflow_dispatch:
@@ -24,7 +24,6 @@ env:
   DESTINATION_IMAGE_NAME: ${{ github.repository }}
   DESTINATION_REGISTRY_USERNAME: ${{ secrets.DESTINATION_REGISTRY_USERNAME || github.actor }}
   DESTINATION_REGISTRY_PASSWORD: ${{ secrets.DESTINATION_REGISTRY_PASSWORD || secrets.GITHUB_TOKEN }}
-
   ODOO_BASE_IMAGE: ghcr.io/adomi-io/odoo:19.0
 
 jobs:
