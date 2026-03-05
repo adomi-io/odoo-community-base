@@ -10,11 +10,14 @@
     'website': 'https://adomi.io',
     'depends': [
         # Web related addons
+        'web_responsive',
+
+        # Remove Odoo branding
+        'remove_odoo_enterprise',
         'disable_odoo_online',
         'mail_debranding',
         'portal_debranding',
         'sale_portal_debranding',
-        'web_responsive',
 
         # Accounting addons
         'account_statement_base',

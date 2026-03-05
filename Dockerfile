@@ -35,6 +35,9 @@ RUN git clone \
         /tmp/oca/server-brand/portal_debranding \
         /tmp/extra_addons/ \
     && cp -a \
+        /tmp/oca/server-brand/remove_odoo_enterprise \
+        /tmp/extra_addons/remove_odoo_enterprise \
+    && cp -a \
         /tmp/oca/server-brand/sale_portal_debranding \
         /tmp/extra_addons/ \
     && cp -a \
@@ -124,6 +127,7 @@ COPY --from=account_reconcile /tmp/extra_addons /volumes/extra_addons/
 
 # OCA: Pending upstream
 #COPY --from=oca_bank_statement_import_plaid /tmp/extra_addons/ /volumes/extra_addons/
+COPY hooks /hooks/
 
 # Copy your configuration into the container
 COPY config/odoo.conf /volumes/config/odoo.conf

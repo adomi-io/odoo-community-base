@@ -13,8 +13,8 @@ services:
       - .env
     volumes:
       # Mount the custom config
-      - ./config/odoo.conf:/volumes/config/odoo.conf
-
+#      - ./config/odoo.conf:/volumes/config/odoo.conf
+      - ./config:/volumes/config
       # Mount your custom addons
       - ./addons:/volumes/addons
 
