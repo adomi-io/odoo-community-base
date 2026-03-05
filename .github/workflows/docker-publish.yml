@@ -60,17 +60,16 @@ jobs:
         with:
           build-args: |
             ODOO_BASE_IMAGE=${{ env.ODOO_BASE_IMAGE }}
-          tags: ${{ env.DESTINATION_REGISTRY }}/${{ env.DESTINATION_IMAGE_NAME }}:${{ env.IMAGE_TAG }}-test
+          tags: ${{ env.DESTINATION_REGISTRY }}/${{ env.DESTINATION_IMAGE_NAME }}:${{ env.IMAGE_TAG }}
           push: false
           pull: true
-          load: true
 
       - name: Run unit tests
         if: ${{ !env.SKIP_UNIT_TESTS }}
         working-directory: tests
         run: ./unit-tests.sh
         env:
-          TESTS_IMAGE_TAG: ${{ env.DESTINATION_REGISTRY }}/${{ env.DESTINATION_IMAGE_NAME }}:${{ env.IMAGE_TAG }}-test
+          TESTS_IMAGE_TAG: ${{ env.DESTINATION_REGISTRY }}/${{ env.DESTINATION_IMAGE_NAME }}:${{ env.IMAGE_TAG }}
           SKIP_BUILD: true
 
       - name: Log into destination registry
@@ -86,7 +85,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v5
         with:
-          images: ${{ env.DESTINATION_REGISTRY }}/${{ env.DESTINATION_IMAGE_NAME }}
+          images: ${{ env.DESTINATION_REGISTRY }}/${{ env.DESTINATION_IMAGE_NAME }}:${{ env.IMAGE_TAG }}
           tags: |
             # Tag by ref (master) or explicit override from workflow_dispatch
             type=raw,value=${{ env.IMAGE_TAG }}
