@@ -23,6 +23,7 @@
         'account_statement_base',
         'account_statement_import_base',
         'account_statement_import_online',
+        'account_usability',
 
         # Pending upstream:
         # 'account_statement_import_online_plaid',
