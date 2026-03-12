@@ -51,6 +51,8 @@ The default credentials are:
 
 ### Docker Compose
 
+Clone this repository
+
 Copy the environment file, and check the values:
 
 `cp .env.example .env`
