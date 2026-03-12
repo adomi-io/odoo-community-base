@@ -18,26 +18,6 @@ packages we commonly use in our projects.
 * 🧩 **Community bundle addon**: [`extra_addons/adomi_community`](./extra_addons/adomi_community) acts as a meta addon that auto-installs the bundled community dependencies.
 * 🪝 **Automated install via setup hook**: [`hooks/setup/000.setup_adomi_community.sh`](hooks/setup/000.setup_adomi_community.sh) can create/init a DB and install `adomi_community` once per persisted data directory.
 
-
-## What’s included
-
-This repo currently bakes in (at build time) addons from these OCA repos:
-
-| Repository | Addon | Description |
-|---|---|---|
-| [OCA/web](https://github.com/OCA/web) | `web_responsive` | Responsive web interface for Odoo |
-| [OCA/server-brand](https://github.com/OCA/server-brand) | `disable_odoo_online` | Disable Odoo Online features |
-| | `mail_debranding` | Remove Odoo branding from emails |
-| | `portal_debranding` | Remove Odoo branding from portal |
-| | `sale_portal_debranding` | Remove Odoo branding from sale portal |
-| | `website_debranding` | Remove Odoo branding from website |
-| [OCA/bank-statement-import](https://github.com/OCA/bank-statement-import) | `account_statement_import_base` | Base for bank statement import |
-| | `account_statement_import_online` | Online bank statement import |
-| | `account_statement_import_online_plaid` | (Pending) Online bank statement import via Plaid |
-
-The module [`adomi_community`](./extra_addons/adomi_community/__manifest__.py) depends on
-those addons and is set to `auto_install`.
-
 ## Getting started
 
 > [!WARNING]
@@ -78,6 +58,26 @@ http://localhost:8069
 
 ### Add your own addons
 Place your custom addons under `./addons/`.
+
+## What’s included
+
+This repo currently bakes in (at build time) addons from these OCA repos:
+
+| Repository | Addon | Description |
+|---|---|---|
+| [OCA/web](https://github.com/OCA/web) | `web_responsive` | Responsive web interface for Odoo |
+| [OCA/server-brand](https://github.com/OCA/server-brand) | `disable_odoo_online` | Disable Odoo Online features |
+| | `mail_debranding` | Remove Odoo branding from emails |
+| | `portal_debranding` | Remove Odoo branding from portal |
+| | `sale_portal_debranding` | Remove Odoo branding from sale portal |
+| | `website_debranding` | Remove Odoo branding from website |
+| [OCA/bank-statement-import](https://github.com/OCA/bank-statement-import) | `account_statement_import_base` | Base for bank statement import |
+| | `account_statement_import_online` | Online bank statement import |
+| | `account_statement_import_online_plaid` | (Pending) Online bank statement import via Plaid |
+
+The module [`adomi_community`](./extra_addons/adomi_community/__manifest__.py) depends on
+those addons and is set to `auto_install`.
+
 
 ### Add or remove OCA/community addons
 
