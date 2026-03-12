@@ -56,6 +56,12 @@ ARG ODOO_BASE_IMAGE=ghcr.io/adomi-io/odoo-community-base:latest
 - Copy the `.env.example` file to `.env`
 - Run `docker compose up --build`
 
+When this image starts, it will [automatically install the community addons](https://github.com/adomi-io/odoo-community-base/blob/master/hooks/setup/000.setup_adomi_community.sh), and setup a database.
+
+The default credentials are:
+- Username: `admin` 
+- Password: `admin`
+
 ### Docker Compose
 
 Copy the environment file, and check the values:
