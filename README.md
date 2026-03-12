@@ -56,7 +56,7 @@ ARG ODOO_BASE_IMAGE=ghcr.io/adomi-io/odoo-community-base:latest
 - Copy the `.env.example` file to `.env`
 - Run `docker compose up --build`
 
-### Docker Compose (recommended)
+### Docker Compose
 
 Copy the environment file, and check the values:
 
