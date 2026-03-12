@@ -9,7 +9,7 @@ packages we commonly use in our projects.
 > Upstream image source code
 > 
 > - [adomi-io/odoo](https://github.com/adomi-io/odoo)
-> - [adomi-io/odoo-boilerplate](https://github.com/adomi-io/odoo-boilerplate)
+> - [adomi-io/boilerplate-odoo](https://github.com/adomi-io/boilerplate-odoo)
 
 
 ## Highlights
@@ -44,6 +44,17 @@ those addons and is set to `auto_install`.
 > This project is designed to run via Docker.
 > Install Docker Desktop on Windows/Mac:
 > [Download Docker Desktop](https://www.docker.com/products/docker-desktop/)
+
+### Quickstart
+
+- Create a repo using the [Odoo boilerplate](https://github.com/adomi-io/boilerplate-odoo)
+- Change the [ODOO_BASE_IMAGE in the Dockerfile](https://github.com/adomi-io/boilerplate-odoo#changing-the-base-image) to
+
+```dockerfile
+ARG ODOO_BASE_IMAGE=ghcr.io/adomi-io/odoo-community-base:latest
+```
+- Copy the `.env.example` file to `.env`
+- Run `docker compose up --build`
 
 ### Docker Compose (recommended)
 
