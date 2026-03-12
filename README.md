@@ -83,6 +83,7 @@ This repo currently bakes in (at build time) addons from these OCA repos:
 | [OCA/bank-statement-import](https://github.com/OCA/bank-statement-import) | `account_statement_import_base` | Base for bank statement import |
 | | `account_statement_import_online` | Online bank statement import |
 | | `account_statement_import_online_plaid` | (Pending) Online bank statement import via Plaid |
+| [OCA/account-analytic](https://github.com/OCA/account-analytic) | `account_analytic_tag` | Adds tags to analytic accounts |
 
 The module [`adomi_community`](./extra_addons/adomi_community/__manifest__.py) depends on
 those addons and is set to `auto_install`.

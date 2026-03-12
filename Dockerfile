@@ -103,6 +103,20 @@ RUN git clone \
         /tmp/extra_addons/
 
 
+FROM oca_base AS oca_account_analytic
+
+RUN mkdir -p /tmp/extra_addons
+
+RUN git clone \
+        --depth 1 \
+        --branch 19.0 \
+        https://github.com/OCA/account-analytic.git \
+        /tmp/oca/account-analytic \
+    && cp -a \
+        /tmp/oca/account-analytic/account_analytic_tag \
+        /tmp/extra_addons/
+
+
 FROM ${ODOO_BASE_IMAGE} AS configuration_layer
 
 # Set user to root so we can install dependencies
@@ -138,6 +152,7 @@ COPY --from=oca_web /tmp/extra_addons/ /volumes/extra_addons/
 COPY --from=oca_bank_statement_import /tmp/extra_addons/ /volumes/extra_addons/
 COPY --from=account_reconcile /tmp/extra_addons /volumes/extra_addons/
 COPY --from=oca_account_financial_tools /tmp/extra_addons/ /volumes/extra_addons/
+COPY --from=oca_account_analytic /tmp/extra_addons/ /volumes/extra_addons/
 
 # OCA: Pending upstream
 #COPY --from=oca_bank_statement_import_plaid /tmp/extra_addons/ /volumes/extra_addons/

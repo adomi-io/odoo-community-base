@@ -24,6 +24,7 @@
         'account_statement_import_base',
         'account_statement_import_online',
         'account_usability',
+        'account_analytic_tag',
 
         # Pending upstream:
         # 'account_statement_import_online_plaid',
