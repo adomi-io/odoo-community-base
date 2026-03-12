@@ -6,6 +6,13 @@ packages we commonly use in our projects.
 
 
 > [!TIP]
+> **Looking for Enterprise?** 
+> 
+> See our [adomi-io/boilerplate-odoo-enterprise](https://github.com/adomi-io/boilerplate-odoo-enterprise) repository.
+> It will build your team a custom image with Enterprise.
+> 
+
+> [!NOTE]
 > Upstream image source code
 > 
 > - [adomi-io/odoo](https://github.com/adomi-io/odoo)
