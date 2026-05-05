@@ -86,6 +86,9 @@ RUN git clone \
         /tmp/oca/account-reconcile \
     && cp -a \
         /tmp/oca/account-reconcile/account_statement_base \
+        /tmp/extra_addons/ \
+    && cp -a \
+        /tmp/oca/account-reconcile/account_reconcile_oca \
         /tmp/extra_addons/
 
 
@@ -117,6 +120,39 @@ RUN git clone \
         /tmp/extra_addons/
 
 
+FROM oca_base AS oca_server_env
+
+RUN mkdir -p /tmp/extra_addons
+
+RUN git clone \
+        --depth 1 \
+        --branch 19.0 \
+        https://github.com/OCA/server-env.git \
+        /tmp/oca/server-env \
+    && cp -a \
+        /tmp/oca/server-env/server_environment \
+        /tmp/extra_addons/
+
+
+FROM oca_base AS oca_storage
+
+RUN mkdir -p /tmp/extra_addons
+
+RUN git clone \
+        --depth 1 \
+        --branch 19.0 \
+        https://github.com/OCA/storage.git \
+        /tmp/oca/storage \
+    && cp -a \
+        /tmp/oca/storage/fs_storage \
+        /tmp/extra_addons/ \
+    && cp -a \
+        /tmp/oca/storage/fs_attachment \
+        /tmp/extra_addons/ \
+    && cp -a \
+        /tmp/oca/storage/fs_attachment_s3 \
+        /tmp/extra_addons/
+
 FROM ${ODOO_BASE_IMAGE} AS configuration_layer
 
 # Set user to root so we can install dependencies
@@ -124,14 +160,12 @@ USER root
 
 # Here, you can install python dependencies
 # For example:
-# RUN pip install  \
-  #    python-slugify  \
-  #    stripe  \
-  #    mailerlite  \
-  #    pika \
-  #    betterproto \
-  #    typeform \
-  #    meilisearch
+RUN pip install  \
+      requests \
+      packaging \
+      "fsspec[s3]" \
+      python-slugify \
+      inotify
 
 # Extend the layer with our python dependencies installed
 FROM configuration_layer
@@ -153,6 +187,12 @@ COPY --from=oca_bank_statement_import /tmp/extra_addons/ /volumes/extra_addons/
 COPY --from=account_reconcile /tmp/extra_addons /volumes/extra_addons/
 COPY --from=oca_account_financial_tools /tmp/extra_addons/ /volumes/extra_addons/
 COPY --from=oca_account_analytic /tmp/extra_addons/ /volumes/extra_addons/
+
+# OCA: Server Environment related packages
+COPY --from=oca_server_env /tmp/extra_addons/ /volumes/extra_addons/
+
+# OCA: Storage related packages
+COPY --from=oca_storage /tmp/extra_addons/ /volumes/extra_addons/
 
 # OCA: Pending upstream
 #COPY --from=oca_bank_statement_import_plaid /tmp/extra_addons/ /volumes/extra_addons/

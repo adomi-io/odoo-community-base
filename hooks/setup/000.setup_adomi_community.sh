@@ -9,7 +9,6 @@ echo "[hook_setup] Waiting for Postgres at ${ODOO_DB_HOST}:${ODOO_DB_PORT}..."
 # Uses psycopg2 which is already installed with Odoo.
 /usr/local/bin/wait-for-psql.py
 
-
 odoo-bin \
   -c "${ODOO_CONFIG:-/volumes/config/_generated.conf}" \
   -d "${ODOO_DB_NAME}" \

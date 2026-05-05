@@ -4,11 +4,19 @@
     'category': 'Sales/Sales',
     'summary': 'Adomi community layer (OCA dependencies)',
     'description': """
-        Adomi community layer that aggregates OCA/community addons installed as dependencies.
-    """,
+                           Adomi community layer that aggregates OCA/community addons installed as dependencies.
+                       """,
     'author': 'Adomi',
     'website': 'https://adomi.io',
     'depends': [
+        # Odoo core dependencies
+        'base_setup',
+        'portal',
+        'sale',
+        'account',
+        'analytic',
+        'base_sparse_field',
+
         # Web related addons
         'web_responsive',
 
@@ -21,10 +29,17 @@
 
         # Accounting addons
         'account_statement_base',
+        'account_reconcile_oca',
         'account_statement_import_base',
         'account_statement_import_online',
         'account_usability',
         'account_analytic_tag',
+
+        # Storage related addons
+        'server_environment',
+        'fs_storage',
+        'fs_attachment',
+        'fs_attachment_s3',
 
         # Pending upstream:
         # 'account_statement_import_online_plaid',

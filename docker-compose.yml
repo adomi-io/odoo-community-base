@@ -5,7 +5,7 @@ services:
       dockerfile: Dockerfile
     ports:
       - "8069:8069"
-    # environment:
+      # environment:
       # Add additional options here, eg:
       # ODOO_WORKERS: ${ODOO_WORKERS:-0}
       # ODOO_MAX_CRON_THREADS: ${ODOO_MAX_CRON_THREADS:-0}
@@ -14,6 +14,7 @@ services:
     volumes:
       # Mount the custom config
       - ./config/odoo.conf:/volumes/config/odoo.conf
+
       # Mount your custom addons
       - ./addons:/volumes/addons
 
@@ -44,7 +45,7 @@ services:
     volumes:
       - app_odoo_db:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
+      test: [ "CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB" ]
       interval: 5s
       timeout: 5s
       retries: 12
