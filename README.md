@@ -1,29 +1,31 @@
-
 # Adomi - Odoo Community Base
 
-This extends our upstream [`adomi-io/odoo`](https://github.com/adomi-io/odoo) image and contains a selection of OCA 
+This extends our upstream [`adomi-io/odoo`](https://github.com/adomi-io/odoo) image and contains a selection of OCA
 packages we commonly use in our projects.
 
 
 > [!TIP]
-> **Looking for Enterprise?** 
-> 
+> **Looking for Enterprise?**
+>
 > See our [adomi-io/boilerplate-odoo-enterprise](https://github.com/adomi-io/boilerplate-odoo-enterprise) repository.
 > It will build your team a custom image with Enterprise.
-> 
+>
 
 > [!NOTE]
 > Upstream image source code
-> 
+>
 > - [adomi-io/odoo](https://github.com/adomi-io/odoo)
 > - [adomi-io/boilerplate-odoo](https://github.com/adomi-io/boilerplate-odoo)
 
-
 ## Highlights
 
-* 🚀 **OCA packages included**: Grabs up-to-date community plugins and bakes them into `/volumes/extra_addons` via a multi-stage [`Dockerfile`](./Dockerfile) for easy downstream use.
-* 🧩 **Community bundle addon**: [`extra_addons/adomi_community`](./extra_addons/adomi_community) acts as a meta addon that auto-installs the bundled community dependencies.
-* 🪝 **Automated install via setup hook**: [`hooks/setup/000.setup_adomi_community.sh`](hooks/setup/000.setup_adomi_community.sh) can create/init a DB and install `adomi_community` once per persisted data directory.
+* 🚀 **OCA packages included**: Grabs up-to-date community plugins and bakes them into `/volumes/extra_addons` via a
+  multi-stage [`Dockerfile`](./Dockerfile) for easy downstream use.
+* 🧩 **Community bundle addon**: [`extra_addons/adomi_community`](./extra_addons/adomi_community) acts as a meta addon
+  that auto-installs the bundled community dependencies.
+* 🪝 **Automated install via setup hook**: [
+  `hooks/setup/000.setup_adomi_community.sh`](hooks/setup/000.setup_adomi_community.sh) can create/init a DB and install
+  `adomi_community` once per persisted data directory.
 
 ## Getting started
 
@@ -35,18 +37,23 @@ packages we commonly use in our projects.
 ### Quickstart
 
 - Create a repo using the [Odoo boilerplate](https://github.com/adomi-io/boilerplate-odoo)
-- Change the [ODOO_BASE_IMAGE in the Dockerfile](https://github.com/adomi-io/boilerplate-odoo#changing-the-base-image) to
+- Change the [ODOO_BASE_IMAGE in the Dockerfile](https://github.com/adomi-io/boilerplate-odoo#changing-the-base-image)
+  to
 
 ```dockerfile
 ARG ODOO_BASE_IMAGE=ghcr.io/adomi-io/odoo-community-base:latest
 ```
+
 - Copy the `.env.example` file to `.env`
 - Run `docker compose up --build`
 
-When this image starts, it will [automatically install the community addons](https://github.com/adomi-io/odoo-community-base/blob/master/hooks/setup/000.setup_adomi_community.sh), and setup a database.
+When this image starts, it
+will [automatically install the community addons](https://github.com/adomi-io/odoo-community-base/blob/master/hooks/setup/000.setup_adomi_community.sh),
+and setup a database.
 
 The default credentials are:
-- Username: `admin` 
+
+- Username: `admin`
 - Password: `admin`
 
 ### Docker Compose
@@ -58,6 +65,7 @@ Copy the environment file, and check the values:
 `cp .env.example .env`
 
 Start Odoo + Postgres:
+
 ```sh
 docker compose up --build
 ```
@@ -66,28 +74,36 @@ Then open:
 http://localhost:8069
 
 ### Add your own addons
+
 Place your custom addons under `./addons/`.
 
 ## What’s included
 
 This repo currently bakes in (at build time) addons from these OCA repos:
 
-| Repository | Addon | Description |
-|---|---|---|
-| [OCA/web](https://github.com/OCA/web) | `web_responsive` | Responsive web interface for Odoo |
-| [OCA/server-brand](https://github.com/OCA/server-brand) | `disable_odoo_online` | Disable Odoo Online features |
-| | `mail_debranding` | Remove Odoo branding from emails |
-| | `portal_debranding` | Remove Odoo branding from portal |
-| | `sale_portal_debranding` | Remove Odoo branding from sale portal |
-| | `website_debranding` | Remove Odoo branding from website |
-| [OCA/bank-statement-import](https://github.com/OCA/bank-statement-import) | `account_statement_import_base` | Base for bank statement import |
-| | `account_statement_import_online` | Online bank statement import |
-| | `account_statement_import_online_plaid` | (Pending) Online bank statement import via Plaid |
-| [OCA/account-analytic](https://github.com/OCA/account-analytic) | `account_analytic_tag` | Adds tags to analytic accounts |
+| Repository                                                                    | Addon                                   | Description                                      |
+|-------------------------------------------------------------------------------|-----------------------------------------|--------------------------------------------------|
+| [OCA/web](https://github.com/OCA/web)                                         | `web_responsive`                        | Responsive web interface for Odoo                |
+| [OCA/server-brand](https://github.com/OCA/server-brand)                       | `disable_odoo_online`                   | Disable Odoo Online features                     |
+|                                                                               | `mail_debranding`                       | Remove Odoo branding from emails                 |
+|                                                                               | `portal_debranding`                     | Remove Odoo branding from portal                 |
+|                                                                               | `remove_odoo_enterprise`                | Remove Odoo Enterprise features                  |
+|                                                                               | `sale_portal_debranding`                | Remove Odoo branding from sale portal            |
+|                                                                               | `website_debranding`                    | Remove Odoo branding from website                |
+| [OCA/bank-statement-import](https://github.com/OCA/bank-statement-import)     | `account_statement_import_base`         | Base for bank statement import                   |
+|                                                                               | `account_statement_import_online`       | Online bank statement import                     |
+|                                                                               | `account_statement_import_online_plaid` | (Pending) Online bank statement import via Plaid |
+| [OCA/account-reconcile](https://github.com/OCA/account-reconcile)             | `account_statement_base`                | Base for account bank statements                 |
+|                                                                               | `account_reconcile_oca`                 | OCA account reconciliation                       |
+| [OCA/account-financial-tools](https://github.com/OCA/account-financial-tools) | `account_usability`                     | Account usability improvements                   |
+| [OCA/account-analytic](https://github.com/OCA/account-analytic)               | `account_analytic_tag`                  | Adds tags to analytic accounts                   |
+| [OCA/server-env](https://github.com/OCA/server-env)                           | `server_environment`                    | Server environment configuration                 |
+| [OCA/storage](https://github.com/OCA/storage)                                 | `fs_storage`                            | Filesystem storage backend                       |
+|                                                                               | `fs_attachment`                         | Store attachments on filesystem storage          |
+|                                                                               | `fs_attachment_s3`                      | Store attachments on S3-compatible storage       |
 
 The module [`adomi_community`](./extra_addons/adomi_community/__manifest__.py) depends on
 those addons and is set to `auto_install`.
-
 
 ### Add or remove OCA/community addons
 
@@ -101,9 +117,10 @@ To add a new addon:
 - Copy the addon folder(s) into `/tmp/extra_addons/`
 - Add a `COPY --from=...` into the final image stage
 - Add the addon as a dependency in
-   [`extra_addons/adomi_community/__manifest__.py`](./extra_addons/adomi_community/__manifest__.py)
+  [`extra_addons/adomi_community/__manifest__.py`](./extra_addons/adomi_community/__manifest__.py)
 
 ## Common commands
+
 Open a shell in the running container:
 
 ```sh
