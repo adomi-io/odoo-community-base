@@ -153,6 +153,21 @@ RUN git clone \
         /tmp/oca/storage/fs_attachment_s3 \
         /tmp/extra_addons/
 
+
+FROM oca_base AS oca_server_auth
+
+RUN mkdir -p /tmp/extra_addons
+
+RUN git clone \
+        --depth 1 \
+        --branch 19.0 \
+        https://github.com/OCA/server-auth.git \
+        /tmp/oca/server-auth \
+    && cp -a \
+        /tmp/oca/server-auth/auth_oidc \
+        /tmp/extra_addons/
+
+
 FROM ${ODOO_BASE_IMAGE} AS configuration_layer
 
 # Set user to root so we can install dependencies
@@ -165,6 +180,7 @@ RUN pip install  \
       packaging \
       "fsspec[s3]" \
       python-slugify \
+      python-jose \
       inotify
 
 # Extend the layer with our python dependencies installed
@@ -193,6 +209,9 @@ COPY --from=oca_server_env /tmp/extra_addons/ /volumes/extra_addons/
 
 # OCA: Storage related packages
 COPY --from=oca_storage /tmp/extra_addons/ /volumes/extra_addons/
+
+# OCA: Authentication (OpenID Connect — sign in with Authentik / any OIDC provider)
+COPY --from=oca_server_auth /tmp/extra_addons/ /volumes/extra_addons/
 
 # OCA: Pending upstream
 #COPY --from=oca_bank_statement_import_plaid /tmp/extra_addons/ /volumes/extra_addons/

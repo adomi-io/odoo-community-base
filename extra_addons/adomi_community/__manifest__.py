@@ -3,9 +3,7 @@
     'version': '1.0',
     'category': 'Sales/Sales',
     'summary': 'Adomi community layer (OCA dependencies)',
-    'description': """
-                           Adomi community layer that aggregates OCA/community addons installed as dependencies.
-                       """,
+    'description': "Adomi community layer that aggregates OCA/community addons installed as dependencies.",
     'author': 'Adomi',
     'website': 'https://adomi.io',
     'depends': [
@@ -19,6 +17,9 @@
 
         # Web related addons
         'web_responsive',
+
+        # Authentication / openid connect
+        'auth_oidc',
 
         # Remove Odoo branding
         'remove_odoo_enterprise',

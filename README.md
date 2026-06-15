@@ -84,6 +84,7 @@ This repo currently bakes in (at build time) addons from these OCA repos:
 | Repository                                                                    | Addon                                   | Description                                      |
 |-------------------------------------------------------------------------------|-----------------------------------------|--------------------------------------------------|
 | [OCA/web](https://github.com/OCA/web)                                         | `web_responsive`                        | Responsive web interface for Odoo                |
+| [OCA/server-auth](https://github.com/OCA/server-auth)                         | `auth_oidc`                             | Log in via OpenID Connect (e.g. Authentik SSO)   |
 | [OCA/server-brand](https://github.com/OCA/server-brand)                       | `disable_odoo_online`                   | Disable Odoo Online features                     |
 |                                                                               | `mail_debranding`                       | Remove Odoo branding from emails                 |
 |                                                                               | `portal_debranding`                     | Remove Odoo branding from portal                 |
