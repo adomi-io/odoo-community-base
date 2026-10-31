@@ -80,7 +80,7 @@ jobs:
 
       - name: Log into destination registry
         if: github.event_name != 'pull_request'
-        uses: docker/login-action@v3
+        uses: docker/login-action@v4
         with:
           registry: ${{ env.DESTINATION_REGISTRY }}
           username: ${{ env.DESTINATION_REGISTRY_USERNAME }}
