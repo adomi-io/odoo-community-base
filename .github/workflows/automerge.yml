@@ -1,4 +1,5 @@
-# Merge Dependabot pull requests once the build has passed
+# Merge Dependabot submodule updates once the build has passed
+# Pull requests that change workflow files cannot be merged with the workflow token
 name: Auto-merge dependency updates
 
 on:
@@ -17,7 +18,7 @@ jobs:
     if: >-
       github.event.workflow_run.conclusion == 'success' &&
       github.event.workflow_run.event == 'pull_request' &&
-      startsWith(github.event.workflow_run.head_branch, 'dependabot/')
+      startsWith(github.event.workflow_run.head_branch, 'dependabot/submodules/')
     runs-on: ubuntu-latest
 
     steps:
