@@ -19,8 +19,9 @@ packages we commonly use in our projects.
 
 ## Highlights
 
-* 🚀 **OCA packages included**: Grabs up-to-date community plugins and bakes them into `/volumes/extra_addons` via a
-  multi-stage [`Dockerfile`](./Dockerfile) for easy downstream use.
+* 🚀 **OCA packages included**: a selection of community addons baked into `/volumes/extra_addons` by the
+  [`Dockerfile`](./Dockerfile) from pinned OCA checkouts (git submodules under [`oca/`](./oca)), kept current by
+  Dependabot and merged automatically once the image builds and boots (see *How updates flow*).
 * 🧩 **Community bundle addon**: [`extra_addons/adomi_community`](./extra_addons/adomi_community) acts as a meta addon
   that auto-installs the bundled community dependencies.
 * 🪝 **Automated install via setup hook**: [
@@ -108,17 +109,34 @@ those addons and is set to `auto_install`.
 
 ### Add or remove OCA/community addons
 
-Edit [`Dockerfile`](./Dockerfile).
-Each OCA repo is cloned in its own build stage, and selected addons are copied into
-`/volumes/extra_addons`.
+The OCA repositories are git submodules under [`oca/`](./oca), each pinned to a commit on its `19.0`
+branch (`.gitmodules`). Clone with `git clone --recurse-submodules` (or run `git submodule update --init`
+in an existing checkout). The `oca_addons` stage of the [`Dockerfile`](./Dockerfile) copies the addons we
+ship out of those checkouts into `/volumes/extra_addons`.
 
-To add a new addon:
+To add an addon from a repository that is already a submodule: add a `COPY oca/<repo>/<addon> ./<addon>`
+line to the `oca_addons` stage and the addon to `depends` in
+[`extra_addons/adomi_community/__manifest__.py`](./extra_addons/adomi_community/__manifest__.py).
 
-- Add a new build stage that clones the OCA repo/branch you want
-- Copy the addon folder(s) into `/tmp/extra_addons/`
-- Add a `COPY --from=...` into the final image stage
-- Add the addon as a dependency in
-  [`extra_addons/adomi_community/__manifest__.py`](./extra_addons/adomi_community/__manifest__.py)
+To add a repository: `git submodule add --depth 1 -b 19.0 https://github.com/OCA/<repo>.git oca/<repo>`,
+then the two steps above. If the addon needs a Python package, add it to the `pip install` step: the build
+fails otherwise (below).
+
+### How updates flow
+
+1. Dependabot ([`.github/dependabot.yml`](./.github/dependabot.yml)) opens one grouped pull request a day when any
+   OCA submodule is behind its `19.0` branch, and a weekly one for the GitHub Actions versions.
+2. The build workflow ([`docker-publish.yml`](./.github/workflows/docker-publish.yml)) builds the image on the pull
+   request. The build fails if an addon needs a python package the image does not have
+   ([`scripts/check_addon_deps.py`](./scripts/check_addon_deps.py)), then the image is started against a fresh
+   database until `/web/health` answers ([`tests/smoke-test.sh`](./tests/smoke-test.sh)).
+3. [`automerge.yml`](./.github/workflows/automerge.yml) merges the pull request once the build passed. A failed
+   build leaves it open.
+4. Every merge or push to `master` publishes `latest`, `master` and `sha-<short>`.
+5. [`upstream-image.yml`](./.github/workflows/upstream-image.yml) checks the digest of `ghcr.io/adomi-io/odoo:19.0`
+   every two hours (stored in the repository variable `UPSTREAM_ODOO_DIGEST`) and starts a build when it changed.
+
+Deployments run dated tags (`master-YYYY-MM-DD`) and move to a new build by hand.
 
 ## Common commands
 
