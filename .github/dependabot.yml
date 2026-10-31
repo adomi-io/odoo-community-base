@@ -1,0 +1,22 @@
+# Keeps the OCA submodules and the GitHub Actions versions up to date
+version: 2
+
+updates:
+  - package-ecosystem: gitsubmodule
+    directory: /
+    schedule:
+      interval: daily
+      time: "02:00"
+      timezone: America/Detroit
+    groups:
+      oca:
+        patterns:
+          - "*"
+    commit-message:
+      prefix: "OCA"
+    open-pull-requests-limit: 2
+
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly

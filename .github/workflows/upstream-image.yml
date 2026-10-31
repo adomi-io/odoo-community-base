@@ -1,0 +1,60 @@
+# Rebuild this image when the upstream Odoo image changes
+name: Rebuild on upstream image change
+
+on:
+  schedule:
+    - cron: "17 */2 * * *"
+  workflow_dispatch:
+
+permissions:
+  actions: write
+  contents: read
+  packages: read
+
+env:
+  UPSTREAM_IMAGE: ghcr.io/adomi-io/odoo:19.0
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Log into GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Compare the upstream digest with the last one built
+        id: digest
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO: ${{ github.repository }}
+          KNOWN_DIGEST: ${{ vars.UPSTREAM_ODOO_DIGEST }}
+        run: |
+          CURRENT_DIGEST=$(docker buildx imagetools inspect "$UPSTREAM_IMAGE" --format '{{.Manifest.Digest}}')
+
+          echo "Upstream: $CURRENT_DIGEST"
+          echo "Known:    ${KNOWN_DIGEST:-none}"
+
+          if [ "$CURRENT_DIGEST" = "$KNOWN_DIGEST" ]; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          gh variable set UPSTREAM_ODOO_DIGEST \
+            --repo "$REPO" \
+            --body "$CURRENT_DIGEST"
+
+          echo "changed=true" >> "$GITHUB_OUTPUT"
+
+      - name: Start the image build
+        if: steps.digest.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO: ${{ github.repository }}
+        run: |
+          gh workflow run docker-publish.yml \
+            --repo "$REPO" \
+            --ref master

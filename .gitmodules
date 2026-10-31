@@ -1,0 +1,36 @@
+[submodule "oca/server-brand"]
+	path = oca/server-brand
+	url = https://github.com/OCA/server-brand.git
+	branch = 19.0
+[submodule "oca/web"]
+	path = oca/web
+	url = https://github.com/OCA/web.git
+	branch = 19.0
+[submodule "oca/bank-statement-import"]
+	path = oca/bank-statement-import
+	url = https://github.com/OCA/bank-statement-import.git
+	branch = 19.0
+[submodule "oca/account-reconcile"]
+	path = oca/account-reconcile
+	url = https://github.com/OCA/account-reconcile.git
+	branch = 19.0
+[submodule "oca/account-financial-tools"]
+	path = oca/account-financial-tools
+	url = https://github.com/OCA/account-financial-tools.git
+	branch = 19.0
+[submodule "oca/account-analytic"]
+	path = oca/account-analytic
+	url = https://github.com/OCA/account-analytic.git
+	branch = 19.0
+[submodule "oca/server-env"]
+	path = oca/server-env
+	url = https://github.com/OCA/server-env.git
+	branch = 19.0
+[submodule "oca/storage"]
+	path = oca/storage
+	url = https://github.com/OCA/storage.git
+	branch = 19.0
+[submodule "oca/server-auth"]
+	path = oca/server-auth
+	url = https://github.com/OCA/server-auth.git
+	branch = 19.0

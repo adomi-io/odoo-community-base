@@ -8,164 +8,67 @@
 ARG ODOO_BASE_IMAGE=ghcr.io/adomi-io/odoo:19.0
 
 
-FROM alpine:3.20 AS oca_base
+# OCA addons are checked out as git submodules under oca/
+# Copy the ones we ship into /tmp/extra_addons
+FROM alpine:3.20 AS oca_addons
 
-RUN apk add --no-cache \
-    git
+WORKDIR /tmp/extra_addons
 
-WORKDIR /tmp/oca
+# OCA/server-brand
+COPY oca/server-brand/disable_odoo_online ./disable_odoo_online
+COPY oca/server-brand/mail_debranding ./mail_debranding
+COPY oca/server-brand/portal_debranding ./portal_debranding
+COPY oca/server-brand/remove_odoo_enterprise ./remove_odoo_enterprise
+COPY oca/server-brand/sale_portal_debranding ./sale_portal_debranding
+COPY oca/server-brand/website_debranding ./website_debranding
 
+# OCA/web
+COPY oca/web/web_responsive ./web_responsive
 
-FROM oca_base AS oca_server_brand
+# OCA/bank-statement-import
+COPY oca/bank-statement-import/account_statement_import_base ./account_statement_import_base
+COPY oca/bank-statement-import/account_statement_import_online ./account_statement_import_online
 
-RUN mkdir -p /tmp/extra_addons
+# OCA/account-reconcile
+COPY oca/account-reconcile/account_statement_base ./account_statement_base
+COPY oca/account-reconcile/account_reconcile_oca ./account_reconcile_oca
 
-RUN git clone \
-        --depth 1 \
-        --branch 19.0 \
-        https://github.com/OCA/server-brand.git \
-        /tmp/oca/server-brand \
-    && cp -a \
-        /tmp/oca/server-brand/disable_odoo_online \
-        /tmp/extra_addons/ \
-    && cp -a \
-        /tmp/oca/server-brand/mail_debranding \
-        /tmp/extra_addons/ \
-    && cp -a \
-        /tmp/oca/server-brand/portal_debranding \
-        /tmp/extra_addons/ \
-    && cp -a \
-        /tmp/oca/server-brand/remove_odoo_enterprise \
-        /tmp/extra_addons/remove_odoo_enterprise \
-    && cp -a \
-        /tmp/oca/server-brand/sale_portal_debranding \
-        /tmp/extra_addons/ \
-    && cp -a \
-        /tmp/oca/server-brand/website_debranding \
-        /tmp/extra_addons/
+# OCA/account-financial-tools
+COPY oca/account-financial-tools/account_usability ./account_usability
 
+# OCA/account-analytic
+COPY oca/account-analytic/account_analytic_tag ./account_analytic_tag
 
-FROM oca_base AS oca_web
+# OCA/server-env
+COPY oca/server-env/server_environment ./server_environment
 
-RUN mkdir -p /tmp/extra_addons
+# OCA/storage
+COPY oca/storage/fs_storage ./fs_storage
+COPY oca/storage/fs_attachment ./fs_attachment
+COPY oca/storage/fs_attachment_s3 ./fs_attachment_s3
 
-RUN git clone \
-        --depth 1 \
-        --branch 19.0 \
-        https://github.com/OCA/web.git \
-        /tmp/oca/web \
-    && cp -a \
-        /tmp/oca/web/web_responsive \
-        /tmp/extra_addons/
-
-FROM oca_base AS oca_bank_statement_import
-
-RUN mkdir -p /tmp/extra_addons
-
-RUN git clone \
-        --depth 1 \
-        --branch 19.0 \
-        https://github.com/OCA/bank-statement-import.git \
-        /tmp/oca/bank-statement-import \
-    && cp -a \
-        /tmp/oca/bank-statement-import/account_statement_import_base \
-        /tmp/extra_addons/ \
-    && cp -a \
-        /tmp/oca/bank-statement-import/account_statement_import_online \
-        /tmp/extra_addons/
+# OCA/server-auth
+COPY oca/server-auth/auth_oidc ./auth_oidc
 
 
-FROM oca_base AS account_reconcile
-
-RUN mkdir -p /tmp/extra_addons
-
-RUN git clone \
-        --depth 1 \
-        --branch 19.0 \
-        https://github.com/OCA/account-reconcile.git \
-        /tmp/oca/account-reconcile \
-    && cp -a \
-        /tmp/oca/account-reconcile/account_statement_base \
-        /tmp/extra_addons/ \
-    && cp -a \
-        /tmp/oca/account-reconcile/account_reconcile_oca \
-        /tmp/extra_addons/
-
-
-FROM oca_base AS oca_account_financial_tools
-
-RUN mkdir -p /tmp/extra_addons
-
-RUN git clone \
-        --depth 1 \
-        --branch 19.0 \
-        https://github.com/OCA/account-financial-tools.git \
-        /tmp/oca/account-financial-tools \
-    && cp -a \
-        /tmp/oca/account-financial-tools/account_usability \
-        /tmp/extra_addons/
-
-
-FROM oca_base AS oca_account_analytic
-
-RUN mkdir -p /tmp/extra_addons
-
-RUN git clone \
-        --depth 1 \
-        --branch 19.0 \
-        https://github.com/OCA/account-analytic.git \
-        /tmp/oca/account-analytic \
-    && cp -a \
-        /tmp/oca/account-analytic/account_analytic_tag \
-        /tmp/extra_addons/
-
-
-FROM oca_base AS oca_server_env
-
-RUN mkdir -p /tmp/extra_addons
-
-RUN git clone \
-        --depth 1 \
-        --branch 19.0 \
-        https://github.com/OCA/server-env.git \
-        /tmp/oca/server-env \
-    && cp -a \
-        /tmp/oca/server-env/server_environment \
-        /tmp/extra_addons/
-
-
-FROM oca_base AS oca_storage
-
-RUN mkdir -p /tmp/extra_addons
-
-RUN git clone \
-        --depth 1 \
-        --branch 19.0 \
-        https://github.com/OCA/storage.git \
-        /tmp/oca/storage \
-    && cp -a \
-        /tmp/oca/storage/fs_storage \
-        /tmp/extra_addons/ \
-    && cp -a \
-        /tmp/oca/storage/fs_attachment \
-        /tmp/extra_addons/ \
-    && cp -a \
-        /tmp/oca/storage/fs_attachment_s3 \
-        /tmp/extra_addons/
-
-
-FROM oca_base AS oca_server_auth
-
-RUN mkdir -p /tmp/extra_addons
-
-RUN git clone \
-        --depth 1 \
-        --branch 19.0 \
-        https://github.com/OCA/server-auth.git \
-        /tmp/oca/server-auth \
-    && cp -a \
-        /tmp/oca/server-auth/auth_oidc \
-        /tmp/extra_addons/
+# Addons can also be cloned straight from a repository instead of a submodule
+# For example:
+#
+# FROM alpine:3.20 AS oca_bank_statement_import_plaid
+#
+# RUN apk add --no-cache \
+#     git
+#
+# RUN mkdir -p /tmp/extra_addons
+#
+# RUN git clone \
+#         --depth 1 \
+#         --branch 19.0 \
+#         https://github.com/OCA/bank-statement-import.git \
+#         /tmp/oca/bank-statement-import \
+#     && cp -a \
+#         /tmp/oca/bank-statement-import/account_statement_import_online_plaid \
+#         /tmp/extra_addons/
 
 
 FROM ${ODOO_BASE_IMAGE} AS configuration_layer
@@ -181,7 +84,8 @@ RUN pip install  \
       "fsspec[s3]" \
       python-slugify \
       python-jose \
-      inotify
+      inotify \
+      openupgradelib
 
 # Extend the layer with our python dependencies installed
 FROM configuration_layer
@@ -194,27 +98,11 @@ USER 1000
 # and mounted files are located
 WORKDIR /volumes
 
-# OCA: Copy UI related packages
-COPY --from=oca_server_brand /tmp/extra_addons/ /volumes/extra_addons/
-COPY --from=oca_web /tmp/extra_addons/ /volumes/extra_addons/
+# Copy the OCA addons
+COPY --from=oca_addons /tmp/extra_addons/ /volumes/extra_addons/
+# COPY --from=oca_bank_statement_import_plaid /tmp/extra_addons/ /volumes/extra_addons/
 
-# OCA: Accounting related packages
-COPY --from=oca_bank_statement_import /tmp/extra_addons/ /volumes/extra_addons/
-COPY --from=account_reconcile /tmp/extra_addons /volumes/extra_addons/
-COPY --from=oca_account_financial_tools /tmp/extra_addons/ /volumes/extra_addons/
-COPY --from=oca_account_analytic /tmp/extra_addons/ /volumes/extra_addons/
-
-# OCA: Server Environment related packages
-COPY --from=oca_server_env /tmp/extra_addons/ /volumes/extra_addons/
-
-# OCA: Storage related packages
-COPY --from=oca_storage /tmp/extra_addons/ /volumes/extra_addons/
-
-# OCA: Authentication (OpenID Connect — sign in with Authentik / any OIDC provider)
-COPY --from=oca_server_auth /tmp/extra_addons/ /volumes/extra_addons/
-
-# OCA: Pending upstream
-#COPY --from=oca_bank_statement_import_plaid /tmp/extra_addons/ /volumes/extra_addons/
+# Copy the startup hooks
 COPY hooks /hooks/
 
 # Copy your configuration into the container
@@ -225,3 +113,7 @@ COPY extra_addons /volumes/extra_addons
 
 # Copy your custom addons into the container
 COPY addons /volumes/addons
+
+# Fail the build if an addon needs a python package that is not installed
+RUN --mount=type=bind,source=scripts/check_addon_deps.py,target=/tmp/check_addon_deps.py \
+    python3 /tmp/check_addon_deps.py /volumes/extra_addons /volumes/addons
