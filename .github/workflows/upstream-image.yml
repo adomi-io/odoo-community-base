@@ -13,6 +13,7 @@ permissions:
 
 env:
   UPSTREAM_IMAGE: ghcr.io/adomi-io/odoo:19.0
+  BUILT_IMAGE: ghcr.io/${{ github.repository }}:latest
 
 jobs:
   check:
@@ -26,26 +27,25 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Compare the upstream digest with the last one built
+      # The build stamps the base digest it used on the published image, so there is
+      # no state to write back here (the workflow token cannot set repository variables)
+      - name: Compare the upstream digest with the one the last build used
         id: digest
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          REPO: ${{ github.repository }}
-          KNOWN_DIGEST: ${{ vars.UPSTREAM_ODOO_DIGEST }}
         run: |
-          CURRENT_DIGEST=$(docker buildx imagetools inspect "$UPSTREAM_IMAGE" --format '{{.Manifest.Digest}}')
+          CURRENT_DIGEST=$(docker buildx imagetools inspect "$UPSTREAM_IMAGE" --format '{{json .Manifest}}' | jq -r '.digest')
+
+          # Empty when nothing was published yet or the last build predates the label
+          KNOWN_DIGEST=$(docker buildx imagetools inspect "$BUILT_IMAGE" --format '{{json .Image}}' 2>/dev/null \
+            | jq -r '[.. | objects | select(has("config")) | .config.Labels["org.opencontainers.image.base.digest"] // empty] | first // empty' \
+            || true)
 
           echo "Upstream: $CURRENT_DIGEST"
-          echo "Known:    ${KNOWN_DIGEST:-none}"
+          echo "Built:    ${KNOWN_DIGEST:-none}"
 
           if [ "$CURRENT_DIGEST" = "$KNOWN_DIGEST" ]; then
             echo "changed=false" >> "$GITHUB_OUTPUT"
             exit 0
           fi
-
-          gh variable set UPSTREAM_ODOO_DIGEST \
-            --repo "$REPO" \
-            --body "$CURRENT_DIGEST"
 
           echo "changed=true" >> "$GITHUB_OUTPUT"
 

@@ -124,17 +124,19 @@ fails otherwise (below).
 
 ### How updates flow
 
-1. Dependabot ([`.github/dependabot.yml`](./.github/dependabot.yml)) opens one grouped pull request a day when any
-   OCA submodule is behind its `19.0` branch, and a weekly one for the GitHub Actions versions.
-2. The build workflow ([`docker-publish.yml`](./.github/workflows/docker-publish.yml)) builds the image on the pull
-   request. The build fails if an addon needs a python package the image does not have
-   ([`scripts/check_addon_deps.py`](./scripts/check_addon_deps.py)), then the image is started against a fresh
-   database until `/web/health` answers ([`tests/smoke-test.sh`](./tests/smoke-test.sh)).
-3. [`automerge.yml`](./.github/workflows/automerge.yml) merges the pull request once the build passed. A failed
-   build leaves it open.
-4. Every merge or push to `master` publishes `latest`, `master` and `sha-<short>`.
-5. [`upstream-image.yml`](./.github/workflows/upstream-image.yml) checks the digest of `ghcr.io/adomi-io/odoo:19.0`
-   every two hours (stored in the repository variable `UPSTREAM_ODOO_DIGEST`) and starts a build when it changed.
+The image keeps itself current without anyone watching it. Dependabot ([
+`.github/dependabot.yml`](./.github/dependabot.yml)) opens a grouped pull request whenever an OCA submodule
+falls behind its `19.0` branch, and a weekly one for the GitHub Actions versions. The build workflow ([
+`docker-publish.yml`](./.github/workflows/docker-publish.yml)) builds that pull request, checks every shipped
+addon has the Python packages it needs ([`scripts/check_addon_deps.py`](./scripts/check_addon_deps.py)) and
+boots the image against a fresh database until `/web/health` answers ([`tests/smoke-test.sh`](./tests/smoke-test.sh)). A
+green build is merged by
+[`automerge.yml`](./.github/workflows/automerge.yml).
+
+Every merge or push to `master` publishes `latest`, `master` and `sha-<short>`. Each build pins the base image to
+the digest `ghcr.io/adomi-io/odoo:19.0` points at and records it in the `org.opencontainers.image.base.digest`
+label of the published image. [`upstream-image.yml`](./.github/workflows/upstream-image.yml) compares that label
+with the upstream digest every two hours and starts a new build when Odoo itself has changed.
 
 Deployments run dated tags (`master-YYYY-MM-DD`) and move to a new build by hand.
 
